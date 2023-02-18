@@ -8,14 +8,27 @@
     <body>
         <script src="./assets/js/script.js"></script>
         <head>
-            <a href="#viewhighscore">View Highscore</a>
-            <div class="timer"></div>
+            <div class="timer">
+                <a href="#viewhighscore">View Highscore</a>
+                <p id="timeremaining">Seconds Remaining</p>
+            </div>
         </head>
         <main>
             <section class="container">
-                <section class="question"></section>
-                <section class="answers"></section>
-                <section class="question-status"></section>
+                <section class="question">
+                    <p>
+                        Welcome to the Javascript Quiz. You have 60 seconds to complete the quiz. If you get a question wrong 5 seconds will be subtracted from the time remaining. Once you have completed the quiz the remaining time will be your score. Click the start button to begin.
+                    </p>
+                    <button onclick="startQuiz()">START</button>
+                </section>
+                <section class="answers">
+                    <ul>
+
+                    </ul>
+                </section>
+                <section class="question-status">
+                    <p></p>
+                </section>
             </section>
         </main>
     </body>
