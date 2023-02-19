@@ -35,6 +35,37 @@ if (highscoreCache != null){
     highscores = JSON.parse(highscoreCache)
 }
 
+function init(remove){
+    /*
+        start button had unexpected behavior if it was used repeatedly.
+        set to create it here, and removed when the quiz starts.
+        its also set to be created on play it again function.
+        its only removed here if it already exists from the play it again function
+    */
+    if(remove == 'y'){
+        startBtn.remove()
+    }
+    secondsLeft = 60
+    questionindex = 0
+    stopTimer = false
+    questionEl.textContent = "Welcome to the Javascript Quiz. You have 60 seconds to complete the quiz. If you get a question wrong 5 seconds will be subtracted from the time remaining. Once you have completed the quiz the remaining time will be your score. Click the start button to begin."
+    startBtn = document.createElement('button')
+    startBtn.setAttribute("style", "display:block")
+    startBtn.textContent = "START"
+    questionEl.appendChild(startBtn)
+    startBtn.addEventListener('click', function(event){
+        event.preventDefault()
+        startQuiz()
+    })
+    //Remove these elements incase user doesn't click on saving highscore button
+    if (document.contains(document.getElementById('submitEl'))){
+        document.getElementById('submitEl').remove()
+    }
+    if (document.contains(document.getElementById('txtInputEl'))){
+        document.getElementById('txtInputEl').remove()
+    }
+}
+
 function startQuiz(){
     //remove start button
     startBtn.remove()
@@ -103,23 +134,45 @@ function checkAnswer(value, answer){
     nextquestion()
 }
 
-//Clear answers, questions, timer, and question status from screen
-function clearDisplay(){
-    answersEl.textContent = ''
-    questionEl.textContent = ''
-    statusEl.textContent = ''
+function quitQuiz(x){
+    // stop the timer
+    stopTimer = true
+    //Clear answers, questions, timer, and question status from screen
+    clearDisplay()
+    clearTimer()
+    if (x == "won"){
+        highScoreEntry()
+        questionEl.textContent = 'YOU WON!'
+        playAgain()
+    }else{
+        questionEl.textContent = "YOU LOST!"
+        playAgain()
+    }
 }
 
-function clearTimer(){
-    timerEl.textContent = ''
+function playAgain(){
+    // change the button to restart script and set properties
+    startBtn = document.createElement('button')
+    startBtn.textContent = "PLAY AGAIN!"
+    startBtn.setAttribute("style", "display:block")
+    questionEl.appendChild(startBtn)
+    startBtn.addEventListener('click', function(event){
+        event.preventDefault
+        init('y')
+    })
 }
 
+/* 
+    Create form for highscore entry and display it
 
-// Create form for highscore entry and display it
+    submit and input have ID added so they can be removed by init if user 
+    doesn't click on the save highscore button
+*/
 function highScoreEntry(){
     formEl = document.createElement('form')
     txtInputEl = document.createElement('input')
     txtInputEl.setAttribute('type', 'text')
+    txtInputEl.setAttribute('id', 'txtInputEl')
     submitEl = document.createElement('input')
     submitEl.setAttribute('type', 'submit')
     submitEl.setAttribute('value', 'Save Highscore')
@@ -142,59 +195,15 @@ function highScoreEntry(){
     })
 }
 
-function quitQuiz(x){
-    // stop the timer
-    stopTimer = true
-    //Clear answers, questions, timer, and question status from screen
-    clearDisplay()
-    clearTimer()
-    if (x == "won"){
-        highScoreEntry()
-        questionEl.textContent = 'YOU WON!'
-        playAgain()
-    }else{
-        questionEl.textContent = "YOU LOST!"
-        playAgain()
-    }
+//Clear answers, questions, timer, and question status from screen
+function clearDisplay(){
+    answersEl.textContent = ''
+    questionEl.textContent = ''
+    statusEl.textContent = ''
 }
 
-function playAgain(){
-        // change the button to restart script and set properties
-        startBtn = document.createElement('button')
-        startBtn.textContent = "PLAY AGAIN!"
-        startBtn.setAttribute("style", "display:block")
-        questionEl.appendChild(startBtn)
-        startBtn.addEventListener('click', function(event){
-            event.preventDefault
-            init('y')
-        })
-}
-
-function init(remove){
-    /*
-        start button had unexpected behavior if it was used repeatedly.
-        set to create it here, and removed when the quiz starts.
-        its also set to be created on play it again function.
-        its only removed here if it already exists from the play it again function
-    */
-    if(remove == 'y'){
-        startBtn.remove()
-    }
-    secondsLeft = 60
-    questionindex = 0
-    stopTimer = false
-    questionEl.textContent = "Welcome to the Javascript Quiz. You have 60 seconds to complete the quiz. If you get a question wrong 5 seconds will be subtracted from the time remaining. Once you have completed the quiz the remaining time will be your score. Click the start button to begin."
-    startBtn = document.createElement('button')
-    startBtn.setAttribute("style", "display:block")
-    startBtn.textContent = "START"
-    questionEl.appendChild(startBtn)
-    startBtn.addEventListener('click', function(event){
-        event.preventDefault()
-        startQuiz()
-    })
-    if (document.contains(document.getElementById('submitEl'))){
-        document.getElementById('submitEl').remove()
-    }
+function clearTimer(){
+    timerEl.textContent = ''
 }
 
 //initialize the page
