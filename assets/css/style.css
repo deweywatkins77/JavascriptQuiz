@@ -1,0 +1,85 @@
+body {
+    background-color: #cccccc;
+}
+
+.timercontainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    height: 55px;
+    margin: auto;
+    font-size: 22px;
+}
+
+a:link, a:visited {
+    color: rgb(2, 148, 148);
+    text-decoration: none;
+}
+
+.mcontainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.qcontainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.question {
+    font-size: 28px;
+    font-family: 'Times New Roman', Times, serif;
+    white-space: pre-wrap;
+    height: 300px;
+    width: 90.5%;
+    margin: auto;
+}
+
+.big{
+    font-size: 60px;
+    text-align: center;
+    padding-top: 200px;
+    margin: auto;
+}
+
+button {
+    font-size: 24px;
+    width: 100px;
+    margin: auto;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    font-size: 24px;
+    width: 90%;
+    margin: auto;
+}
+
+form input {
+    font-size: 24px;
+    margin: auto;
+}
+
+ul li {
+    font-size: 24px;
+    list-style: none;
+    width: 90.5%;
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    background-image: linear-gradient(to bottom right, rgb(2, 148, 148), rgb(1, 151, 151))
+}
+
+ul li:hover {
+    cursor: pointer;
+}

@@ -1,15 +1,31 @@
 var highscoreCache = localStorage.getItem("highscoreCache")
-var highscores = []
-var containerEl = document.querySelector(".container")
+var timerEl = document.querySelector('.timercontainer p')
+var viewHighScores = document.querySelector('.timercontainer a')
+var containerEl = document.querySelector(".qcontainer")
 var questionEl = document.querySelector('.question')
-var startBtn = document.querySelector('#startBtn')
 var answersEl = document.querySelector('.answers ul')
 var statusEl = document.querySelector('.question-status p')
-var timerEl = document.querySelector('.timercontainer p')
-var startBtn = document.getElementById('startBtn')
-var secondsLeft = 60
-var questionindex = 0
-var stopTimer = false
+var highscores = []
+//parse saved scores to array if saved scores exist
+if (highscoreCache != null){
+    highscores = JSON.parse(highscoreCache)
+}
+
+
+//Display highscores
+viewHighScores.addEventListener('click', function(event){
+    event.preventDefault()
+    if (highscores.length > 0){
+        highScoreString = ""
+        highscores.forEach(element =>
+            highScoreString = highScoreString + "\n" + element.name + ": " + element.score
+            )
+    }else{
+        highScoreString = "\nNO HIGH SCORES YET"
+    }
+    window.alert("TOP 10 High Scores!\n" + highScoreString)
+})
+
 
 //add questions,answers, and correct answer for each question to questions array
 var questionsArray = [
@@ -77,11 +93,6 @@ var questionsArray = [
     }
 ]
 
-//parse saved scores to array if saved scores exist
-if (highscoreCache != null){
-    highscores = JSON.parse(highscoreCache)
-}
-
 function init(remove){
     /*
         start button had unexpected behavior if it was used repeatedly.
@@ -92,14 +103,15 @@ function init(remove){
     if(remove == 'y'){
         startBtn.remove()
     }
-    secondsLeft = 60
+    secondsLeft = 900
     questionindex = 0
     stopTimer = false
+    questionEl.setAttribute('class', 'question')
     questionEl.textContent = "Welcome to the Javascript Quiz. You have 60 seconds to complete the quiz. If you get a question wrong 5 seconds will be subtracted from the time remaining. Once you have completed the quiz the remaining time will be your score. Click the start button to begin."
     startBtn = document.createElement('button')
     startBtn.setAttribute("style", "display:block")
     startBtn.textContent = "START"
-    questionEl.appendChild(startBtn)
+    containerEl.appendChild(startBtn)
     startBtn.addEventListener('click', function(event){
         event.preventDefault()
         startQuiz()
@@ -144,7 +156,7 @@ function nextquestion(){
         //clear previous info
         clearDisplay()
         questionEl.textContent = questionsArray[questionindex].question
-        // i is starting at one cause the first answer does as well
+        // i is starting at one because the first answer does as well
         for(i=1; i < Object.keys(questionsArray[questionindex]).length-1; i++){
             var li = document.createElement("li")
             li.setAttribute('data-value', questionsArray[questionindex][i])
@@ -152,6 +164,7 @@ function nextquestion(){
             li.textContent = questionsArray[questionindex][i]
             answersEl.appendChild(li)
         }
+        //increment question index to advance to next question
         questionindex++
     }else{
         //user finished quiz with time to spare and won
@@ -168,9 +181,9 @@ answersEl.addEventListener('click', function(event){
 
 function checkAnswer(value, answer){
     if (value == answer){
-        statusEl.textContent = "Correct Answer"
+        statusEl.textContent = "Previous Answer was CORRECT"
     }else{
-        statusEl.textContent = "Incorrect Answer"
+        statusEl.textContent = "Previous Answer was INCORRECT"
         //subtract time for incorrect answer but dont go below 0
         if (secondsLeft < 6){
             secondsLeft = 0
@@ -186,12 +199,15 @@ function quitQuiz(x){
     stopTimer = true
     //Clear answers, questions, timer, and question status from screen
     clearDisplay()
+    clearStatus()
     clearTimer()
     if (x == "won"){
         highScoreEntry()
+        questionEl.setAttribute('class', 'question big')
         questionEl.textContent = 'YOU WON!'
         playAgain()
     }else{
+        questionEl.setAttribute('class', 'question big')
         questionEl.textContent = "YOU LOST!"
         playAgain()
     }
@@ -220,6 +236,7 @@ function highScoreEntry(){
     txtInputEl = document.createElement('input')
     txtInputEl.setAttribute('type', 'text')
     txtInputEl.setAttribute('id', 'txtInputEl')
+    txtInputEl.setAttribute('placeholder', 'Enter Your Name')
     submitEl = document.createElement('input')
     submitEl.setAttribute('type', 'submit')
     submitEl.setAttribute('value', 'Save Highscore')
@@ -234,7 +251,20 @@ function highScoreEntry(){
         var userScore = {} 
         userScore.name = txtInputEl.value
         userScore.score = secondsLeft
-        highscores.unshift(userScore)
+        //only add score if its in the top 10
+        if (highscores.length > 9){
+            for(i=0; i < 10; i++){
+                if (userScore.score > highscores[0].score){
+                    highscores.splice(i,1)
+                    highscores.unshift(userScore)
+                    //set i = 10 to stop for loop
+                    i = 10
+                }
+                i++
+            }
+        }else{
+            highscores.unshift(userScore)
+        }
         //save highscores to local cache
         localStorage.setItem('highscoreCache',JSON.stringify(highscores))
         //clear form
@@ -246,7 +276,11 @@ function highScoreEntry(){
 function clearDisplay(){
     answersEl.textContent = ''
     questionEl.textContent = ''
-    statusEl.textContent = ''
+
+}
+
+function clearStatus(){
+    statusEl.textContent = ""
 }
 
 function clearTimer(){
