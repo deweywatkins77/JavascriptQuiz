@@ -81,7 +81,7 @@ function nextquestion(){
     }
 }
 
-// Event listner for Li clicks
+// Event listner for answer clicks
 answersEl.addEventListener('click', function(event){
     clickedLi = event.target
     checkAnswer(clickedLi.dataset.value, clickedLi.dataset.answer)
@@ -171,6 +171,12 @@ function playAgain(){
 }
 
 function init(remove){
+    /*
+        start button had unexpected behavior if it was used repeatedly.
+        set to create it here, and removed when the quiz starts.
+        its also set to be created on play it again function.
+        its only removed here if it already exists from the play it again function
+    */
     if(remove == 'y'){
         startBtn.remove()
     }
