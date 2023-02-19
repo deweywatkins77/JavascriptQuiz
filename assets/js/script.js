@@ -1,7 +1,8 @@
-var highscore = localStorage.getItem("highscore")
+var highscoreCache = localStorage.getItem("highscoreCache")
 var highscores = []
-var containerEL = document.querySelector(".container")
-var questionEl = document.querySelector('.question p')
+var containerEl = document.querySelector(".container")
+var questionEl = document.querySelector('.question')
+var startBtn = document.querySelector('#startBtn')
 var answersEl = document.querySelector('.answers ul')
 var statusEl = document.querySelector('.question-status p')
 var timerEl = document.querySelector('.timercontainer p')
@@ -28,16 +29,15 @@ var q1 = {
 }
 
 var questionsArray = [q0, q1]
-console.log(questionsArray)
 
 //parse saved scores to array if saved scores exist
-if (highscore != null){
-    highscores = JSON.parse(highscore)
+if (highscoreCache != null){
+    highscores = JSON.parse(highscoreCache)
 }
 
 function startQuiz(){
-    //hide display button
-    startBtn.setAttribute("style", "display:none")
+    //remove start button
+    startBtn.remove()
     /*
         Due to slight time delay need to display time left before starting.
         This will also give user time to start reading the first question 
@@ -114,6 +114,7 @@ function clearTimer(){
     timerEl.textContent = ''
 }
 
+
 // Create form for highscore entry and display it
 function highScoreEntry(){
     formEl = document.createElement('form')
@@ -121,21 +122,26 @@ function highScoreEntry(){
     txtInputEl.setAttribute('type', 'text')
     submitEl = document.createElement('input')
     submitEl.setAttribute('type', 'submit')
+    submitEl.setAttribute('value', 'Save Highscore')
+    submitEl.setAttribute('id','submitEl')
     formEl.appendChild(txtInputEl)
     formEl.appendChild(submitEl)
-    containerEL.appendChild(formEl)
+    containerEl.appendChild(formEl)
+    //save highscore event
     submitEl.addEventListener('click', function(event){
         event.preventDefault()
+        //prep score for saving
         var userScore = {} 
         userScore.name = txtInputEl.value
         userScore.score = secondsLeft
         highscores.unshift(userScore)
+        //save highscores to local cache
+        localStorage.setItem('highscoreCache',JSON.stringify(highscores))
         //clear form
-        containerEL.remove(formEl)
-        // reload default message and start button incase user wants to play again
-        init()
+        formEl.remove()
     })
 }
+
 function quitQuiz(x){
     // stop the timer
     stopTimer = true
@@ -144,15 +150,45 @@ function quitQuiz(x){
     clearTimer()
     if (x == "won"){
         highScoreEntry()
+        questionEl.textContent = 'YOU WON!'
+        playAgain()
+    }else{
+        questionEl.textContent = "YOU LOST!"
+        playAgain()
     }
 }
 
-function init(){
+function playAgain(){
+        // change the button to restart script and set properties
+        startBtn = document.createElement('button')
+        startBtn.textContent = "PLAY AGAIN!"
+        startBtn.setAttribute("style", "display:block")
+        questionEl.appendChild(startBtn)
+        startBtn.addEventListener('click', function(event){
+            event.preventDefault
+            init('y')
+        })
+}
+
+function init(remove){
+    if(remove == 'y'){
+        startBtn.remove()
+    }
     secondsLeft = 60
     questionindex = 0
     stopTimer = false
     questionEl.textContent = "Welcome to the Javascript Quiz. You have 60 seconds to complete the quiz. If you get a question wrong 5 seconds will be subtracted from the time remaining. Once you have completed the quiz the remaining time will be your score. Click the start button to begin."
-    startBtn.setAttribute("style", "display:default")
+    startBtn = document.createElement('button')
+    startBtn.setAttribute("style", "display:block")
+    startBtn.textContent = "START"
+    questionEl.appendChild(startBtn)
+    startBtn.addEventListener('click', function(event){
+        event.preventDefault()
+        startQuiz()
+    })
+    if (document.contains(document.getElementById('submitEl'))){
+        document.getElementById('submitEl').remove()
+    }
 }
 
 //initialize the page
