@@ -130,7 +130,10 @@ function highScoreEntry(){
         userScore.name = txtInputEl.value
         userScore.score = secondsLeft
         highscores.unshift(userScore)
-        console.log(highscores)
+        //clear form
+        containerEL.remove(formEl)
+        // reload default message and start button incase user wants to play again
+        init()
     })
 }
 function quitQuiz(x){
@@ -142,5 +145,15 @@ function quitQuiz(x){
     if (x == "won"){
         highScoreEntry()
     }
-    console.log(x)
 }
+
+function init(){
+    secondsLeft = 60
+    questionindex = 0
+    stopTimer = false
+    questionEl.textContent = "Welcome to the Javascript Quiz. You have 60 seconds to complete the quiz. If you get a question wrong 5 seconds will be subtracted from the time remaining. Once you have completed the quiz the remaining time will be your score. Click the start button to begin."
+    startBtn.setAttribute("style", "display:default")
+}
+
+//initialize the page
+init()
