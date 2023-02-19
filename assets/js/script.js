@@ -1,12 +1,14 @@
 var highscore = localStorage.getItem("highscore")
+var highscores = []
+var containerEL = document.querySelector(".container")
 var questionEl = document.querySelector('.question p')
 var answersEl = document.querySelector('.answers ul')
 var statusEl = document.querySelector('.question-status p')
 var timerEl = document.querySelector('.timercontainer p')
 var startBtn = document.getElementById('startBtn')
-var secondsLeft = 30
+var secondsLeft = 60
 var questionindex = 0
-var stopQuiz = false
+var stopTimer = false
 
 var q0 = {
     question:'JavaScript is a ___ -side programming language.',
@@ -28,6 +30,11 @@ var q1 = {
 var questionsArray = [q0, q1]
 console.log(questionsArray)
 
+//parse saved scores to array if saved scores exist
+if (highscore != null){
+    highscores = JSON.parse(highscore)
+}
+
 function startQuiz(){
     //hide display button
     startBtn.setAttribute("style", "display:none")
@@ -40,11 +47,13 @@ function startQuiz(){
     // display first question and start quiz timer
     nextquestion()
     var timerInterval = setInterval(function() {
-        if(secondsLeft === 0 || stopQuiz === true) {
+        if(secondsLeft === 0 || stopTimer === true) {
           // Stops execution of action at set interval
           clearInterval(timerInterval);
           //time run out and user lost
-          quitQuiz("lost")
+          if(secondsLeft == 0){
+            quitQuiz("lost")
+          }
         }else{
             timerEl.textContent = "Seconds Remaining: " + secondsLeft
             secondsLeft--
@@ -105,10 +114,33 @@ function clearTimer(){
     timerEl.textContent = ''
 }
 
+// Create form for highscore entry and display it
+function highScoreEntry(){
+    formEl = document.createElement('form')
+    txtInputEl = document.createElement('input')
+    txtInputEl.setAttribute('type', 'text')
+    submitEl = document.createElement('input')
+    submitEl.setAttribute('type', 'submit')
+    formEl.appendChild(txtInputEl)
+    formEl.appendChild(submitEl)
+    containerEL.appendChild(formEl)
+    submitEl.addEventListener('click', function(event){
+        event.preventDefault()
+        var userScore = {} 
+        userScore.name = txtInputEl.value
+        userScore.score = secondsLeft
+        highscores.unshift(userScore)
+        console.log(highscores)
+    })
+}
 function quitQuiz(x){
+    // stop the timer
+    stopTimer = true
     //Clear answers, questions, timer, and question status from screen
     clearDisplay()
     clearTimer()
-    stopQuiz = true
+    if (x == "won"){
+        highScoreEntry()
+    }
     console.log(x)
 }
