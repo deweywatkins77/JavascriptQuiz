@@ -1,6 +1,7 @@
 var highscore = localStorage.getItem("highscore")
-var questionPTag = document.querySelector('.question p')
-var answersUlTag = document.querySelector('.answers ul')
+var questionEl = document.querySelector('.question p')
+var answersEl = document.querySelector('.answers ul')
+var statusEl = document.querySelector('.question-status p')
 var timerEl = document.querySelector('.timercontainer p')
 var startBtn = document.getElementById('startBtn')
 var secondsLeft = 5
@@ -16,14 +17,15 @@ var q0 = {
 }
 var q1 = {
     question:'Which of the following will write the message “Hello World!” in an alert box?',
-    ans1:'alertBox(“Hello World!”);',
-    ans2:'alert(Hello World!);',
-    ans3:'msgAlert(“Hello World!”);',
-    ans4:'alert(“Hello World!”);',
+    1:'alertBox(“Hello World!”);',
+    2:'alert(Hello World!);',
+    3:'msgAlert(“Hello World!”);',
+    4:'alert(“Hello World!”);',
     correct:'alert(“Hello World!”);'
 }
 
-var questionsArray = [q0,q1]
+var questionsArray = [q0, q1]
+console.log(questionsArray)
 
 function startQuiz(){
     //hide display button
@@ -49,24 +51,49 @@ function startQuiz(){
 }
 
 function nextquestion(){
-    if (questionindex < questionsArray.length -1){
-        questionPTag.textContent = questionsArray[questionindex].question
+    if (questionindex < questionsArray.length){
+        clearAnswers()
+        console.log("qindex:   " + questionindex)
+        questionEl.textContent = questionsArray[questionindex].question
         // i is starting at one cause the fist answer does as well
         for(i=1;i < 5; i++){
             var li = document.createElement("li")
+            li.setAttribute('data-value', questionsArray[questionindex][i])
+            li.setAttribute('data-answer', questionsArray[questionindex].correct)
             li.textContent = questionsArray[questionindex][i]
-            answersUlTag.appendChild(li)
+            answersEl.appendChild(li)
         }
+        questionindex++
     }else{
         //user finished quiz with time to spare and won
         quitQuiz("won")
     }
-    questionindex++
 }
 
+// Event listner for Li clicks
+answersEl.addEventListener('click', function(event){
+    clickedLi = event.target
+    checkAnswer(clickedLi.dataset.value, clickedLi.dataset.answer)
+})
+
+
+function checkAnswer(value, answer){
+    if (value == answer){
+        statusEl.textContent = "Correct Answer"
+    }else{
+        statusEl.textContent = "Incorrect Answer"
+    }
+    //Clear answers from screen before calling next function
+    nextquestion()
+}
+
+function clearAnswers(){
+    for (i=0; i < answersEl.childElementCount; i++){
+        answersEl.textContent = ''
+    }
+
+}
 
 function quitQuiz(x){
     console.log(x)
 }
-
-console.log()
