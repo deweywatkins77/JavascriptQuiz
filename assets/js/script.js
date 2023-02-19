@@ -103,7 +103,7 @@ function init(remove){
     if(remove == 'y'){
         startBtn.remove()
     }
-    secondsLeft = 900
+    secondsLeft = 60
     questionindex = 0
     stopTimer = false
     questionEl.setAttribute('class', 'question')
