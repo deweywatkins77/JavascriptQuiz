@@ -6,6 +6,7 @@ var timerEl = document.querySelector('.timercontainer p')
 var startBtn = document.getElementById('startBtn')
 var secondsLeft = 30
 var questionindex = 0
+var stopQuiz = false
 
 var q0 = {
     question:'JavaScript is a ___ -side programming language.',
@@ -39,21 +40,22 @@ function startQuiz(){
     // display first question and start quiz timer
     nextquestion()
     var timerInterval = setInterval(function() {
-        timerEl.textContent = "Seconds Remaining: " + secondsLeft
-        if(secondsLeft === 0) {
+        if(secondsLeft === 0 || stopQuiz === true) {
           // Stops execution of action at set interval
           clearInterval(timerInterval);
           //time run out and user lost
           quitQuiz("lost")
+        }else{
+            timerEl.textContent = "Seconds Remaining: " + secondsLeft
+            secondsLeft--
         }
-        secondsLeft--
       }, 1000);
 }
 
 function nextquestion(){
     if (questionindex < questionsArray.length){
-        //clear answers if they exist
-        clearAnswers()
+        //clear previous info
+        clearDisplay()
         questionEl.textContent = questionsArray[questionindex].question
         // i is starting at one cause the first answer does as well
         for(i=1; i < 5; i++){
@@ -92,13 +94,21 @@ function checkAnswer(value, answer){
     nextquestion()
 }
 
-function clearAnswers(){
-    for (i=0; i < answersEl.childElementCount; i++){
-        answersEl.textContent = ''
-    }
+//Clear answers, questions, timer, and question status from screen
+function clearDisplay(){
+    answersEl.textContent = ''
+    questionEl.textContent = ''
+    statusEl.textContent = ''
+}
 
+function clearTimer(){
+    timerEl.textContent = ''
 }
 
 function quitQuiz(x){
+    //Clear answers, questions, timer, and question status from screen
+    clearDisplay()
+    clearTimer()
+    stopQuiz = true
     console.log(x)
 }
