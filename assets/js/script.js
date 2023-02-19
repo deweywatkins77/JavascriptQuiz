@@ -11,24 +11,71 @@ var secondsLeft = 60
 var questionindex = 0
 var stopTimer = false
 
-var q0 = {
-    question:'JavaScript is a ___ -side programming language.',
+//add questions,answers, and correct answer for each question to questions array
+var questionsArray = [
+    {question:'JavaScript is a ___ -side programming language.',
     1:'Client',
     2:'Server',
     3:'Both',
     4:'None',
     correct:'Both'
-}
-var q1 = {
-    question:'Which of the following will write the message “Hello World!” in an alert box?',
+    },
+    {question:'Which of the following will write the message “Hello World!” in an alert box?',
     1:'alertBox(“Hello World!”);',
     2:'alert(Hello World!);',
     3:'msgAlert(“Hello World!”);',
     4:'alert(“Hello World!”);',
     correct:'alert(“Hello World!”);'
-}
-
-var questionsArray = [q0, q1]
+    },
+    {question: "How do you find the minimum of x and y using JavaScript?",
+    1:"min(x,y);",
+    2:"Math.min(x,y)",
+    3:"Math.min(xy)",
+    4:"min(xy);",
+    correct:"Math.min(x,y)"
+    },
+    {question:"Which of the following statements will throw an error?",
+    1:"var fun = function bar( ){ }",
+    2:"var fun = function bar{ }",
+    3:"function fun( ){ }",
+    correct:"var fun = function bar{ }"
+    },
+    {question:"If the value of x is 40, then what is the output of the following program?\n(x % 10 == 0)? console.log(“Divisible by 10”) : console.log(“Not divisible by 10”);",
+    1:"ReferenceError",
+    2:"Divisible by 10",
+    3:"Not divisible by 10",
+    4:"None of the above",
+    correct:"Divisible by 10"
+    },
+    {question:"Which JavaScript label catches all the values, except for the ones specified?",
+    1:"catch",
+    2:"label",
+    3:"try",
+    4:"default",
+    correct:"default"
+    },
+    {question:"Which are the correct “if” statements to execute certain code if “x” is equal to 2?",
+    1:"if(x 2)",
+    2:"if(x = 2)",
+    3:"if(x == 2)",
+    4:"if(x != 2)",
+    correct:"if(x == 2)"
+    },
+    {question:"What will the code return?\nBoolean(3 < 7)",
+    1:"true",
+    2:"false",
+    3:"NaN",
+    4:"SyntaxError",
+    correct:"true"
+    },
+    {question:"What is the output of the following code in the console?\nvar x = 0;\nfunction fun(){\n ++x;\n this.x = x;\n return x;\n }\n var bar = new new fun;\n console.log(bar.x);",
+    1:"ReferenceError",
+    2:"undefined",
+    3:"1",
+    4:"TypeError",
+    correct:"TypeError"
+    }
+]
 
 //parse saved scores to array if saved scores exist
 if (highscoreCache != null){
@@ -98,7 +145,7 @@ function nextquestion(){
         clearDisplay()
         questionEl.textContent = questionsArray[questionindex].question
         // i is starting at one cause the first answer does as well
-        for(i=1; i < 5; i++){
+        for(i=1; i < Object.keys(questionsArray[questionindex]).length-1; i++){
             var li = document.createElement("li")
             li.setAttribute('data-value', questionsArray[questionindex][i])
             li.setAttribute('data-answer', questionsArray[questionindex].correct)
