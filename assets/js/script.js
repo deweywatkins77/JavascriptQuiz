@@ -4,7 +4,7 @@ var answersEl = document.querySelector('.answers ul')
 var statusEl = document.querySelector('.question-status p')
 var timerEl = document.querySelector('.timercontainer p')
 var startBtn = document.getElementById('startBtn')
-var secondsLeft = 5
+var secondsLeft = 30
 var questionindex = 0
 
 var q0 = {
@@ -52,11 +52,11 @@ function startQuiz(){
 
 function nextquestion(){
     if (questionindex < questionsArray.length){
+        //clear answers if they exist
         clearAnswers()
-        console.log("qindex:   " + questionindex)
         questionEl.textContent = questionsArray[questionindex].question
-        // i is starting at one cause the fist answer does as well
-        for(i=1;i < 5; i++){
+        // i is starting at one cause the first answer does as well
+        for(i=1; i < 5; i++){
             var li = document.createElement("li")
             li.setAttribute('data-value', questionsArray[questionindex][i])
             li.setAttribute('data-answer', questionsArray[questionindex].correct)
@@ -82,8 +82,13 @@ function checkAnswer(value, answer){
         statusEl.textContent = "Correct Answer"
     }else{
         statusEl.textContent = "Incorrect Answer"
+        //subtract time for incorrect answer but dont go below 0
+        if (secondsLeft < 6){
+            secondsLeft = 0
+        }else{
+            secondsLeft = secondsLeft - 5
+        }
     }
-    //Clear answers from screen before calling next function
     nextquestion()
 }
 
