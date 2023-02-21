@@ -170,7 +170,6 @@ answersEl.addEventListener('click', function(event){
     the question
     */
     if (event.target.tagName == "LI"){
-        console.log("yes")
         const {value, answer} = event.target.dataset
         const isCorrect = value == answer;
         statusEl.textContent = `Previous Answer was ${isCorrect ? 'CORRECT' : 'INCORRECT'}`;
