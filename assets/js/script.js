@@ -5,6 +5,8 @@ var containerEl = document.querySelector(".qcontainer")
 var questionEl = document.querySelector('.question')
 var answersEl = document.querySelector('.answers ul')
 var statusEl = document.querySelector('.question-status p')
+var txtInputEl
+var submitEl
 var highscores = []
 //parse saved scores to array if saved scores exist
 if (highscoreCache != null){
@@ -115,11 +117,11 @@ function init(remove){
         startQuiz()
     })
     //Remove these elements incase user doesn't click on saving highscore button
-    if (document.contains(document.getElementById('submitEl'))){
-        document.getElementById('submitEl').remove()
+    if (submitEl){
+        submitEl.remove()
     }
-    if (document.contains(document.getElementById('txtInputEl'))){
-        document.getElementById('txtInputEl').remove()
+    if (txtInputEl){
+        txtInputEl.remove()
     }
 }
 
@@ -135,7 +137,7 @@ function startQuiz(){
     // display first question and start quiz timer
     nextquestion()
     var timerInterval = setInterval(function() {
-        if(secondsLeft === 0 || stopTimer === true) {
+        if(secondsLeft === 0 || stopTimer) {
           // Stops execution of action at set interval
           clearInterval(timerInterval);
           //time run out and user lost
@@ -143,31 +145,31 @@ function startQuiz(){
             quitQuiz("lost")
           }
         }else{
-            timerEl.textContent = "Seconds Remaining: " + secondsLeft
-            secondsLeft--
+            timerEl.textContent = "Seconds Remaining: " + secondsLeft--
         }
       }, 1000);
 }
 
 function nextquestion(){
-    if (questionindex < questionsArray.length){
-        //clear previous info
-        clearDisplay()
-        questionEl.textContent = questionsArray[questionindex].question
-        // i is starting at one because the first answer does as well
-        for(i=1; i < Object.keys(questionsArray[questionindex]).length-1; i++){
-            var li = document.createElement("li")
-            li.setAttribute('data-value', questionsArray[questionindex][i])
-            li.setAttribute('data-answer', questionsArray[questionindex].correct)
-            li.textContent = questionsArray[questionindex][i]
-            answersEl.appendChild(li)
-        }
-        //increment question index to advance to next question
-        questionindex++
-    }else{
-        //user finished quiz with time to spare and won
+    if (questionindex >= questionsArray.length){
         quitQuiz("won")
+        return
     }
+    //clear previous info
+    clearDisplay()
+    const question = questionsArray[questionindex]
+    questionEl.textContent = question.question
+    // i is starting at one because the first answer does as well
+    for(let i=1; i < Object.keys(question).length-1; i++){
+        var li = document.createElement("li")
+        li.setAttribute('data-value', question[i])
+        li.setAttribute('data-answer', question.correct)
+        li.textContent = question[i]
+        answersEl.appendChild(li)
+    }
+    //increment question index to advance to next question
+    questionindex++
+    
 }
 
 // Event listner for answer clicks
