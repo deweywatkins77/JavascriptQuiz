@@ -197,12 +197,11 @@ function quitQuiz(x){
         highScoreEntry()
         questionEl.setAttribute('class', 'question big')
         questionEl.textContent = 'YOU WON!\nYou scored: ' + secondsLeft
-        playAgain()
     }else{
         questionEl.setAttribute('class', 'question big')
         questionEl.textContent = "YOU LOST!"
-        playAgain()
     }
+    playAgain()
 }
 
 function playAgain(){
@@ -219,7 +218,6 @@ function playAgain(){
 
 /* 
     Create form for highscore entry and display it
-
     submit and input have ID added so they can be removed by init if user 
     doesn't click on the save highscore button
 */
@@ -232,34 +230,29 @@ function highScoreEntry(){
     submitEl = document.createElement('input')
     submitEl.setAttribute('type', 'submit')
     submitEl.setAttribute('value', 'Save Highscore')
-    submitEl.setAttribute('id','submitEl')
+    submitEl.setAttribute('id', 'submitEl')
     formEl.appendChild(txtInputEl)
     formEl.appendChild(submitEl)
     containerEl.appendChild(formEl)
-    //save highscore event
-    submitEl.addEventListener('click', function(event){
+    submitEl.addEventListener('click', function (event) {
         event.preventDefault()
-        //prep score for saving
-        var userScore = {} 
+        var userScore = {}
         userScore.name = txtInputEl.value
         userScore.score = secondsLeft
-        //only add score if its in the top 10
-        if (highscores.length > 9){
-            for(i=0; i < 10; i++){
-                if (userScore.score > highscores[0].score){
-                    highscores.splice(i,1)
-                    highscores.unshift(userScore)
-                    //set i = 10 to stop for loop
-                    i = 10
-                }
-                i++
+        // Only save highscore if score is in the top 10
+        if (highscores.length > 9) {
+            if (userScore.score > highscores[highscores.length-1].score){
+                highscores.pop
+                highscores.unshift(userScore)
+            }else{
+                window.alert("Sorry your Highscore did make the TOP 10. Try Again!") 
             }
         }else{
             highscores.unshift(userScore)
         }
-        //save highscores to local cache
-        localStorage.setItem('highscoreCache',JSON.stringify(highscores))
-        //clear form
+        //remove form after click, sort and save highscores
+        highscores.sort((a, b) => b.score - a.score)
+        localStorage.setItem('highscoreCache', JSON.stringify(highscores))
         formEl.remove()
     })
 }
