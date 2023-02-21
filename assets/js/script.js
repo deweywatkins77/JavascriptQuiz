@@ -175,16 +175,11 @@ function nextquestion(){
 // Event listner for answer clicks
 answersEl.addEventListener('click', function(event){
     const {value, answer} = event.target.dataset
-    checkAnswer(value, answer)
-})
-
-
-function checkAnswer(value, answer){
     const isCorrect = value == answer;
     statusEl.textContent = `Previous Answer was ${isCorrect ? 'CORRECT' : 'INCORRECT'}`;
     secondsLeft = Math.max(secondsLeft - (isCorrect ? 0 : 5), 0);
     nextquestion();
-}
+})
 
 function quitQuiz(x){
     // stop the timer
@@ -242,7 +237,7 @@ function highScoreEntry(){
         // Only save highscore if score is in the top 10
         if (highscores.length > 9) {
             if (userScore.score > highscores[highscores.length-1].score){
-                highscores.pop
+                highscores.pop()
                 highscores.unshift(userScore)
             }else{
                 window.alert("Sorry your Highscore did make the TOP 10. Try Again!") 
@@ -261,7 +256,6 @@ function highScoreEntry(){
 function clearDisplay(){
     answersEl.textContent = ''
     questionEl.textContent = ''
-
 }
 
 function clearStatus(){
