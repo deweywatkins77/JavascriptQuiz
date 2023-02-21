@@ -13,7 +13,6 @@ if (highscoreCache != null){
     highscores = JSON.parse(highscoreCache)
 }
 
-
 //Display highscores
 viewHighScores.addEventListener('click', function(event){
     event.preventDefault()
@@ -25,7 +24,6 @@ viewHighScores.addEventListener('click', function(event){
     }
     window.alert("TOP 10 High Scores!\n" + highScoreString)
 })
-
 
 //add questions,answers, and correct answer for each question to questions array
 var questionsArray = [
@@ -172,7 +170,6 @@ answersEl.addEventListener('click', function(event){
     using tag name here, cause with out it, you can click on the ul between the li items and it will bypass
     the question
     */
-    console.log(event.target.tagName)
     if (event.target.tagName == "LI"){
         console.log("yes")
         const {value, answer} = event.target.dataset
