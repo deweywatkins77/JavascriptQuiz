@@ -161,7 +161,6 @@ function nextquestion(){
     }
     //increment question index to advance to next question
     questionindex++
-    
 }
 
 // Event listner for answer clicks
