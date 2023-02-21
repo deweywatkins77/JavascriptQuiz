@@ -16,10 +16,8 @@ if (highscoreCache != null){
 viewHighScores.addEventListener('click', function(event){
     event.preventDefault()
     if (highscores.length > 0){
-        highScoreString = ""
-        highscores.forEach(element =>
-            highScoreString = highScoreString + "\n" + element.name + ": " + element.score
-            )
+       var highScoreString = ""
+        highscores.forEach(element => highScoreString = highScoreString + "\n" + element.name + ": " + element.score)
     }else{
         highScoreString = "\nNO HIGH SCORES YET"
     }
