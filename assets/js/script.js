@@ -174,24 +174,16 @@ function nextquestion(){
 
 // Event listner for answer clicks
 answersEl.addEventListener('click', function(event){
-    clickedLi = event.target
-    checkAnswer(clickedLi.dataset.value, clickedLi.dataset.answer)
+    const {value, answer} = event.target.dataset
+    checkAnswer(value, answer)
 })
 
 
 function checkAnswer(value, answer){
-    if (value == answer){
-        statusEl.textContent = "Previous Answer was CORRECT"
-    }else{
-        statusEl.textContent = "Previous Answer was INCORRECT"
-        //subtract time for incorrect answer but dont go below 0
-        if (secondsLeft < 6){
-            secondsLeft = 0
-        }else{
-            secondsLeft = secondsLeft - 5
-        }
-    }
-    nextquestion()
+    const isCorrect = value == answer;
+    statusEl.textContent = `Previous Answer was ${isCorrect ? 'CORRECT' : 'INCORRECT'}`;
+    secondsLeft = Math.max(secondsLeft - (isCorrect ? 0 : 5), 0);
+    nextquestion();
 }
 
 function quitQuiz(x){
