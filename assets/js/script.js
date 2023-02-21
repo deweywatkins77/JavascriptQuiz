@@ -50,12 +50,6 @@ var questionsArray = [
     4:"min(xy);",
     correct:"Math.min(x,y)"
     },
-    {question:"Which of the following statements will throw an error?",
-    1:"var fun = function bar( ){ }",
-    2:"var fun = function bar{ }",
-    3:"function fun( ){ }",
-    correct:"var fun = function bar{ }"
-    },
     {question:"If the value of x is 40, then what is the output of the following program?\n(x % 10 == 0)? console.log(“Divisible by 10”) : console.log(“Not divisible by 10”);",
     1:"ReferenceError",
     2:"Divisible by 10",
@@ -174,11 +168,19 @@ function nextquestion(){
 
 // Event listner for answer clicks
 answersEl.addEventListener('click', function(event){
-    const {value, answer} = event.target.dataset
-    const isCorrect = value == answer;
-    statusEl.textContent = `Previous Answer was ${isCorrect ? 'CORRECT' : 'INCORRECT'}`;
-    secondsLeft = Math.max(secondsLeft - (isCorrect ? 0 : 5), 0);
-    nextquestion();
+    /*
+    using tag name here, cause with out it, you can click on the ul between the li items and it will bypass
+    the question
+    */
+    console.log(event.target.tagName)
+    if (event.target.tagName == "LI"){
+        console.log("yes")
+        const {value, answer} = event.target.dataset
+        const isCorrect = value == answer;
+        statusEl.textContent = `Previous Answer was ${isCorrect ? 'CORRECT' : 'INCORRECT'}`;
+        secondsLeft = Math.max(secondsLeft - (isCorrect ? 0 : 5), 0);
+        nextquestion();
+    }
 })
 
 function quitQuiz(x){
