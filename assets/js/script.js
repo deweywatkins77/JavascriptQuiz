@@ -204,7 +204,7 @@ function quitQuiz(x){
     if (x == "won"){
         highScoreEntry()
         questionEl.setAttribute('class', 'question big')
-        questionEl.textContent = 'YOU WON!'
+        questionEl.textContent = 'YOU WON!\nYou scored: ' + secondsLeft
         playAgain()
     }else{
         questionEl.setAttribute('class', 'question big')
