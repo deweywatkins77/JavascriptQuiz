@@ -143,7 +143,7 @@ function startQuiz(){
 }
 
 function nextquestion(){
-    if (questionindex >= questionsArray.length){
+    if (questionindex >= questionsArray.length && secondsLeft > 0){
         quitQuiz("won")
         return
     }
